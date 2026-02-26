@@ -2,7 +2,7 @@
 
 %global commit0 7744320ab2c793d092620c2ec859327280b676a6
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
-%global bumpver 1
+%global bumpver 2
 
 Name:           waybar-git
 Version:        0.15.0%{?bumpver:^%{bumpver}.git%{shortcommit0}}

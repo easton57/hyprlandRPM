@@ -1,4 +1,4 @@
-%global commit0 f05d28d805a22a7564895aa178772361c44b6b7a
+%global commit0 aea4ea398b7c75494f23f5e5bdb4f495d615059f
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 %global _vpath_srcdir subprojects/appmenu-glib-translator

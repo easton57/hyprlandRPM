@@ -14,10 +14,8 @@ BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
 
-BuildRequires:  cmake(Qt6Quick)
-BuildRequires:  cmake(Qt6QuickControls2)
-BuildRequires:  cmake(Qt6WaylandClient)
-BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  cmake(qt6-qtbase-gui)
+BuildRequires:  cmake(qt6-qtbase)
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  wayland-devel
 BuildRequires:  pkgconfig(hyprutils)
