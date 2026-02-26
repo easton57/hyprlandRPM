@@ -16,6 +16,8 @@ BuildRequires:  qt6-rpm-macros
 
 BuildRequires:  qt6-qtbase-gui
 BuildRequires:  qt6-qtbase
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtdeclarative-devel
 
 BuildRequires:  pkgconfig(hyprlang)
 

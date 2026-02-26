@@ -16,6 +16,8 @@ BuildRequires:  gcc-c++
 
 BuildRequires:  qt6-qtbase-gui
 BuildRequires:  qt6-qtbase
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtdeclarative-devel
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  wayland-devel
 BuildRequires:  pkgconfig(hyprutils)
