@@ -1,5 +1,5 @@
 Name:           hyprpwcenter
-Version:        0.1.1
+Version:        0.1.2
 Release:        %autorelease
 Summary:        A GUI Pipewire control center
 
