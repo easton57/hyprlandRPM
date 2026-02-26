@@ -20,10 +20,10 @@ BuildRequires:  pkgconfig(hyprutils)
 BuildRequires:  cmake(KF6ColorScheme)
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(Qt6BuildInternals)
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  cmake(qt6-qtbase-gui)
+BuildRequires:  cmake(qt6-qtbase)
+
 
 %description
 %{summary}.

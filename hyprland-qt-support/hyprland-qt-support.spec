@@ -14,9 +14,8 @@ BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  qt6-rpm-macros
 
-BuildRequires:  cmake(Qt6Quick)
-BuildRequires:  cmake(Qt6QuickControls2)
-BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(qt6-qtbase-gui)
+BuildRequires:  cmake(qt6-qtbase)
 
 BuildRequires:  pkgconfig(hyprlang)
 
