@@ -6,7 +6,7 @@
 # https://github.com/Aylur/ags
 %global goipath         ags
 %global forgeurl        https://github.com/Aylur/ags
-Version:                2.3.0
+Version:                3.1.1
 
 %gometa -L -f
 
