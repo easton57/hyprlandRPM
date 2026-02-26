@@ -1,6 +1,6 @@
-%global astal_commit 7f2292f0792ffc9b127d4788b3dd3f104b5374b2
+%global astal_commit eb235f8813bdea2a4a38ac228f2efc4e2a8a90af
 %global astal_shortcommit %(c=%{astal_commit}; echo ${c:0:7})
-%global bumpver 6
+%global bumpver 7
 
 %global debug_package %{nil}
 %global _vpath_srcdir lang/lua
