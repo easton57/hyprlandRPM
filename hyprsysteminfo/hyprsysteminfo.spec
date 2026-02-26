@@ -14,8 +14,8 @@ BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
 
-BuildRequires:  cmake(qt6-qtbase-gui)
-BuildRequires:  cmake(qt6-qtbase)
+BuildRequires:  qt6-qtbase-gui
+BuildRequires:  qt6-qtbase
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  wayland-devel
 BuildRequires:  pkgconfig(hyprutils)

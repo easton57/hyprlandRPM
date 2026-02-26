@@ -21,8 +21,8 @@ BuildRequires:  cmake(KF6ColorScheme)
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6IconThemes)
 BuildRequires:  qt6-qtbase-private-devel
-BuildRequires:  cmake(qt6-qtbase-gui)
-BuildRequires:  cmake(qt6-qtbase)
+BuildRequires:  qt6-qtbase-gui
+BuildRequires:  qt6-qtbase
 
 
 %description
