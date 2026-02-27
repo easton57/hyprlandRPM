@@ -7,7 +7,8 @@ Summary:        A material you color generation tool with templates
 License:        GPL-2.0-only
 
 URL:            https://github.com/InioX/matugen
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source1:        vendor.tar.gz
 
 BuildRequires:  cargo-rpm-macros >= 24
 
@@ -18,7 +19,7 @@ BuildRequires:  cargo-rpm-macros >= 24
 
 %prep
 %autosetup -p1
-cargo vendor
+tar xf %{Source1}
 %cargo_prep -v vendor
 
 %build
