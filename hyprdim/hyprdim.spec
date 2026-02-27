@@ -33,7 +33,7 @@ Automatically dim windows in Hyprland when switching between them.}
 
 %prep
 %autosetup -p1
-tar xf %{Source1}
+tar xf %{SOURCE1}
 %cargo_prep -v vendor
 
 %build

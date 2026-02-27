@@ -19,7 +19,7 @@ applications - tested with waybar.
 
 %prep
 %autosetup -p1
-tar xf %{Source1}
+tar xf %{SOURCE1}
 %cargo_prep -v vendor
 sed '/LICENSE.md$/d' -i Makefile
 

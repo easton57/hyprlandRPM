@@ -33,7 +33,7 @@ allows you to implement your own, custom widgets in any window manager.
 
 %prep
 %autosetup -n eww-%{commit0}
-tar xf %{Source1}
+tar xf %{SOURCE1}
 %cargo_prep -v vendor
 
 %build

@@ -68,7 +68,7 @@ Swappy and Flameshot.}
 
 %prep
 %autosetup -n Satty-%{version} -p1
-tar xf %{Source1}
+tar xf %{SOURCE1}
 %cargo_prep -v vendor
 
 %build
