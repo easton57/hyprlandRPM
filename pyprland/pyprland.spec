@@ -9,6 +9,10 @@ Source:         %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel
+BuildRequires:  python3-poetry-core
+BuildRequires:  python3-aiofiles
+BuildRequires:  python3-aiohttp
+BuildRequires:  python3-questionary
 
 %description
 Pyprland is a host process for multiple Hyprland extensions, aiming at
@@ -20,7 +24,7 @@ It provides a variety of plugins you can enable to your liking.
 find -type f -exec sed -i '1s|^#!/bin/env python$|#!%{python3}|' {} +
 
 %generate_buildrequires
-%pyproject_buildrequires
+%pyproject_buildrequires -N
 
 %build
 %pyproject_wheel
