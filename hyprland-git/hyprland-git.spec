@@ -263,6 +263,7 @@ install -Dpm644 %{SOURCE4} -t %{buildroot}%{_rpmconfigdir}/macros.d
 %files
 %license LICENSE LICENSE-udis86 LICENSE-hyprland-protocols
 %{_bindir}/[Hh]yprland
+%{_bindir}/start-hyprland
 %{_bindir}/hyprctl
 %{_bindir}/hyprpm
 %{_datadir}/hypr/
