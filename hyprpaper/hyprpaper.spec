@@ -26,6 +26,9 @@ BuildRequires:  pkgconfig(pango)
 BuildRequires:  pkgconfig(pangocairo)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-protocols)
+BuildRequires: hyprtoolkit-devel
+BuildRequires: hyprwire-devel
+BuildRequires: libdrm-devel
 
 %description
 Hyprpaper is a blazing fast wallpaper utility for Hyprland with the ability
