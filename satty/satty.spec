@@ -44,7 +44,9 @@ License:        %{shrink:
 # LICENSE.dependencies contains a full license breakdown
 
 URL:            https://github.com/gabm/satty
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source1:        vendor.tar.gz
+
 
 BuildRequires:  cargo-rpm-macros >= 26
 BuildRequires:  desktop-file-utils
@@ -66,7 +68,7 @@ Swappy and Flameshot.}
 
 %prep
 %autosetup -n Satty-%{version} -p1
-cargo vendor
+tar xf %{Source1}
 %cargo_prep -v vendor
 
 %build

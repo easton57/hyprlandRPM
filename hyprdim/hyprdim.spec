@@ -21,7 +21,8 @@ License:        GPL-3.0-or-later AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0
 # LICENSE.dependencies contains a full license breakdown
 
 URL:            https://github.com/donovanglover/hyprdim
-Source:         %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source1:        vendor.tar.gz
 
 BuildRequires:  cargo-rpm-macros >= 24
 
@@ -32,7 +33,7 @@ Automatically dim windows in Hyprland when switching between them.}
 
 %prep
 %autosetup -p1
-cargo vendor
+tar xf %{Source1}
 %cargo_prep -v vendor
 
 %build

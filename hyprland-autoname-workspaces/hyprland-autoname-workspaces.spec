@@ -5,7 +5,9 @@ Summary:        Hyprland autoname workspaces
 
 License:        ISC
 URL:            https://github.com/hyprland-community/hyprland-autoname-workspaces
-Source:         %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source1:        vendor.tar.gz
+
 
 BuildRequires:  rust-packaging >= 21
 BuildRequires:  systemd-rpm-macros
@@ -17,6 +19,8 @@ applications - tested with waybar.
 
 %prep
 %autosetup -p1
+tar xf %{Source1}
+%cargo_prep -v vendor
 sed '/LICENSE.md$/d' -i Makefile
 
 

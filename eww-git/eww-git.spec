@@ -9,7 +9,8 @@ Summary:        ElKowars wacky widgets
 
 License:        MIT
 URL:            https://github.com/elkowar/eww
-Source:         %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
+Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
+Source1:        vendor.tar.gz
 
 BuildRequires:  cargo-rpm-macros
 BuildRequires:  gcc
@@ -32,7 +33,7 @@ allows you to implement your own, custom widgets in any window manager.
 
 %prep
 %autosetup -n eww-%{commit0}
-cargo vendor
+tar xf %{Source1}
 %cargo_prep -v vendor
 
 %build
