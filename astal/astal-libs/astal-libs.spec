@@ -40,6 +40,7 @@ BuildRequires:  pkgconfig(wireplumber-0.5)
 BuildRequires:  python3
 BuildRequires:  vala
 BuildRequires:  valadoc
+BuildRequires:  cava
 
 %package        devel
 Summary:        Development files for %{name}
