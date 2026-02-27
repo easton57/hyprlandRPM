@@ -20,7 +20,8 @@ License:        GPL-3.0-or-later AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0
 # LICENSE.dependencies contains a full license breakdown
 
 URL:            https://github.com/donovanglover/hyprnome
-Source:         %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source1:        vendor.tar.gz
 
 BuildRequires:  cargo-rpm-macros >= 24
 BuildRequires:  gcc-c++
@@ -32,7 +33,7 @@ GNOME-like workspace switching in Hyprland.}
 
 %prep
 %autosetup -p1
-cargo vendor
+tar xf %{Source1}
 %cargo_prep -v vendor
 
 %build
