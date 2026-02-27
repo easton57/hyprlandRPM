@@ -40,7 +40,6 @@ BuildRequires:  pkgconfig(wireplumber-0.5)
 BuildRequires:  python3
 BuildRequires:  vala
 BuildRequires:  valadoc
-BuildRequires:  cava
 
 %package        devel
 Summary:        Development files for %{name}
@@ -54,6 +53,7 @@ Development files for %{name}.
 %prep
 %autosetup -n astal-%{astal_commit} -p1
 tar -xf %{SOURCE1} -C lib/cava/subprojects
+mv lib/cava/subprojects/cava-0.10.3 lib/cava/subprojects/libcava
 
 %build
 cd lib
