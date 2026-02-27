@@ -87,6 +87,7 @@ hyprdeps = {
     "pkgconfig(xcb)",
     "pkgconfig(xcursor)",
     "pkgconfig(xwayland)",
+    "pkgconfig(muparser)"
     }
 }
 %if 0%{?fedora} > 42
