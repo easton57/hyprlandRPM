@@ -1,3 +1,4 @@
 *.tar.*
+!vendor.tar.gz
 *.rpm
 results_*
