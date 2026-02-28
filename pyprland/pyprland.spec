@@ -24,7 +24,7 @@ It provides a variety of plugins you can enable to your liking.
 find -type f -exec sed -i '1s|^#!/bin/env python$|#!%{python3}|' {} +
 
 %generate_buildrequires
-%pyproject_buildrequires -N
+%pyproject_buildrequires
 
 %build
 %pyproject_wheel
@@ -40,6 +40,7 @@ install -Dpm0755 client/pypr-client -t %{buildroot}%{_bindir}
 %license LICENSE
 %doc README.md
 %{_bindir}/pypr
+%{_bindir}/pypr-quickstart
 %{_bindir}/pypr-client
 
 %changelog
