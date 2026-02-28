@@ -1,0 +1,25 @@
+From 109dea0d6531dcae7a30a694c68da538057a1809 Mon Sep 17 00:00:00 2001
+From: Easton Seidel <eseidel@localhost.localdomain>
+Date: Fri, 27 Feb 2026 15:59:37 -0800
+Subject: [PATCH] include fix
+
+---
+ src/config/ConfigManager.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/config/ConfigManager.cpp b/src/config/ConfigManager.cpp
+index 6f2fa51..8b41748 100644
+--- a/src/config/ConfigManager.cpp
++++ b/src/config/ConfigManager.cpp
+@@ -3,6 +3,8 @@
+ #include "../helpers/Log.hpp"
+ 
+ #include <hyprutils/path/Path.hpp>
++#include <climits>
++#include <unistd.h>
+ 
+ CConfigManager::CConfigManager() : m_inotifyFd(inotify_init()) {
+     const auto CFGPATH = Hyprutils::Path::findConfig("hyprlauncher").first.value_or("");
+-- 
+2.53.0
+

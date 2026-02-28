@@ -1,0 +1,24 @@
+From be280f2a1ff4310f1daf13766635d594acb8410b Mon Sep 17 00:00:00 2001
+From: Easton Seidel <eseidel@localhost.localdomain>
+Date: Fri, 27 Feb 2026 16:03:48 -0800
+Subject: [PATCH] desktop finder include fix
+
+---
+ src/finders/desktop/DesktopFinder.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/finders/desktop/DesktopFinder.cpp b/src/finders/desktop/DesktopFinder.cpp
+index 9bdfb8d..4cefc03 100644
+--- a/src/finders/desktop/DesktopFinder.cpp
++++ b/src/finders/desktop/DesktopFinder.cpp
+@@ -10,6 +10,7 @@
+ #include <sys/inotify.h>
+ #include <sys/poll.h>
+ #include <unordered_set>
++#include <unistd.h>
+ 
+ #include <hyprutils/string/String.hpp>
+ #include <hyprutils/os/Process.hpp>
+-- 
+2.53.0
+
