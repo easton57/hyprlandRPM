@@ -44,6 +44,7 @@ Source:         %{url}/archive/%{commit0}/%{name}-%{commit0}.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  meson
+BuildRequires:  libxkbcommon
 BuildRequires:  %{hyprlandpkg}-devel
 
 Requires:       %{hyprlandpkg} = %_hyprland_version
