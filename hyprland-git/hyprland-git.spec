@@ -92,7 +92,7 @@ hyprdeps = {
     }
 }
 %if 0%{?fedora} > 42
-BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  libxkbcommon
 %endif
 
 %define printbdeps(r) %{lua:
