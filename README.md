@@ -1,8 +1,4 @@
-0.49.0 → last version for Fedora 41
-
-0.51.0 → likely the last version for Fedora 42 (as of 2025-09-15, hyprland-git fails to build on F42)
-
-0.51.0+ → would require Fedora 43
+0.54.2 → Built for 42+ currently
 
 A collection of Hyprland and related packages:
 
