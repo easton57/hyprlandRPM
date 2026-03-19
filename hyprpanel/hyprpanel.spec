@@ -14,15 +14,16 @@ URL:            https://github.com/Jas-SinghFSU/HyprPanel
 Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
 
 BuildRequires:  /usr/bin/sass
-BuildRequires:  aylurs-gtk-shell2
+BuildRequires:  aylurs-gtk-shell
 BuildRequires:  meson
+BuildRequires:  astal-gjs
 
 Requires:       /usr/bin/bluetoothctl
 Requires:       /usr/bin/sass
 Requires:       /usr/bin/wireplumber
 Requires:       /usr/bin/wl-copy
 Requires:       /usr/bin/wl-paste
-Requires:       aylurs-gtk-shell2
+Requires:       aylurs-gtk-shell
 Requires:       bluez
 Requires:       gnome-bluetooth
 Requires:       gtksourceview3
@@ -58,6 +59,8 @@ Provides:       HyprPanel
 %autosetup -n HyprPanel-%{commit0} -p1
 
 %build
+mkdir -p node_modules
+ln -s %{_datadir}/astal/gjs node_modules/astal
 %meson
 %meson_build
 
