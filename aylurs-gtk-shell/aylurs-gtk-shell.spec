@@ -11,6 +11,7 @@ URL:            https://github.com/Aylur/ags
 Source0:        %{url}/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
 
 BuildRequires:  npm
+BuildRequires:  gjs
 BuildRequires:  meson
 BuildRequires:  ninja-build
 BuildRequires:  golang
