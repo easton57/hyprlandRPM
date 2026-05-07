@@ -2,5 +2,3 @@
 !vendor.tar.gz
 *.rpm
 results_*
-package_test.sh
-old
