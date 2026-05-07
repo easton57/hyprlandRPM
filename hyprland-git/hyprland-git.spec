@@ -89,9 +89,12 @@ hyprdeps = {
     "pkgconfig(xwayland)",
     "pkgconfig(muparser)",
     "pkgconfig(hyprwire)",
-    "pkgconfig(xkbcommon)"
     }
 }
+
+%if 0%{?fedora} > 42
+    BuildRequires:  pkgconfig(xkbcommon)
+%endif
 
 %define printbdeps(r) %{lua:
 for _, dep in ipairs(hyprdeps) do
