@@ -13,7 +13,7 @@
 %global libxkbcommon_version 1.11.0
 
 Name:           hyprland-git
-Version:        0.54.2%{?bumpver:^%{bumpver}.git%{hyprland_shortcommit}}
+Version:        0.55.2%{?bumpver:^%{bumpver}.git%{hyprland_shortcommit}}
 Release:        %autorelease
 Summary:        Dynamic tiling Wayland compositor that doesn't sacrifice on its looks
 
@@ -89,9 +89,12 @@ hyprdeps = {
     "pkgconfig(xwayland)",
     "pkgconfig(muparser)",
     "pkgconfig(hyprwire)",
-    "pkgconfig(xkbcommon)"
     }
 }
+
+%if 0%{?fedora} > 42
+    BuildRequires:  pkgconfig(xkbcommon)
+%endif
 
 %define printbdeps(r) %{lua:
 for _, dep in ipairs(hyprdeps) do
