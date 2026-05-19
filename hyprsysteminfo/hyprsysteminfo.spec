@@ -5,7 +5,6 @@ Summary:        An application to display information about the running system
 License:        BSD-3-Clause
 URL:            https://github.com/hyprwm/hyprsysteminfo
 Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-Source1:        https://github.com/stephenberry/glaze/archive/v6.1.0/glaze-6.1.0.tar.gz
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
@@ -13,6 +12,7 @@ ExcludeArch:    %{ix86}
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
+BuildRequires:  glaze
 
 BuildRequires:  qt6-qtbase-gui
 BuildRequires:  qt6-qtbase
@@ -33,11 +33,9 @@ or copy diagnostics data, without the terminal.
 
 %prep
 %autosetup -p1
-tar -xf %{SOURCE1}
-ls %{_builddir}
 
 %build
-%cmake -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_SOURCE_DIR_GLAZE=%{_builddir}/glaze-6.1.0
+%cmake
 %cmake_build
 
 %install
