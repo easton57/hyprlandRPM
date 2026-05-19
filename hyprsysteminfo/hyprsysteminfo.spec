@@ -12,7 +12,7 @@ ExcludeArch:    %{ix86}
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
-BuildRequires:  glaze
+BuildRequires:  glaze-devel
 
 BuildRequires:  qt6-qtbase-gui
 BuildRequires:  qt6-qtbase
