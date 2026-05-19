@@ -34,9 +34,10 @@ or copy diagnostics data, without the terminal.
 %prep
 %autosetup -p1
 tar -xf %{SOURCE1}
+ls %{_builddir}
 
 %build
-%cmake -DCMAKE_BUILD_TYPE=Release -DGLAZE_SOURCE_DIR=%{_builddir}/glaze-6.1.0
+%cmake -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_SOURCE_DIR_GLAZE=%{_builddir}/glaze-6.1.0
 %cmake_build
 
 %install
