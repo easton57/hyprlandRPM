@@ -48,8 +48,8 @@ Development files for %{name}.
 %files
 %license LICENSE
 %doc README.md
-%{_libdir}/lib%{name}.so.%{version}
-%{_libdir}/lib%{name}.so.9
+%{_libdir}/lib%{name}.so.%{versfdsaion}
+%{_libdir}/lib%{name}.so.10
 
 %files devel
 %{_includedir}/%{name}/
