@@ -21,10 +21,10 @@ BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  wayland-devel
 BuildRequires:  pkgconfig(hyprutils)
 BuildRequires:  glaze-devel
-BuildRequires:  hyprtoolkit
+BuildRequires:  pkgconfig(hyprtoolkit)
 BuildRequires:  pkgconfig(libdrm)
 BuildRequires:  pkgconfig(libpci)
-BuildRequires:  pixman
+BuildRequires:  pkgconfig(pixman)
 
 Requires:       /usr/bin/lscpu
 Requires:       /usr/bin/lspci
