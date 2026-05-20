@@ -5,7 +5,6 @@ Summary:        An application to display information about the running system
 License:        BSD-3-Clause
 URL:            https://github.com/hyprwm/hyprsysteminfo
 Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-Patch:          fix-build.diff
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
@@ -21,6 +20,11 @@ BuildRequires:  qt6-qtdeclarative-devel
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  wayland-devel
 BuildRequires:  pkgconfig(hyprutils)
+BuildRequires:  glaze-devel
+BuildRequires:  pkgconfig(hyprtoolkit)
+BuildRequires:  pkgconfig(libdrm)
+BuildRequires:  pkgconfig(libpci)
+BuildRequires:  pixman-devel
 
 Requires:       /usr/bin/lscpu
 Requires:       /usr/bin/lspci
