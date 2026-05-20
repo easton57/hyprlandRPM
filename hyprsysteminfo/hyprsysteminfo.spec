@@ -24,7 +24,7 @@ BuildRequires:  glaze-devel
 BuildRequires:  pkgconfig(hyprtoolkit)
 BuildRequires:  pkgconfig(libdrm)
 BuildRequires:  pkgconfig(libpci)
-BuildRequires:  pkgconfig(pixman)
+BuildRequires:  pixman-devel
 
 Requires:       /usr/bin/lscpu
 Requires:       /usr/bin/lspci
