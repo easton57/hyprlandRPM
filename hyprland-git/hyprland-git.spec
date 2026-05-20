@@ -89,7 +89,13 @@ hyprdeps = {
     "pkgconfig(xwayland)",
     "pkgconfig(muparser)",
     "pkgconfig(hyprwire)",
-    }
+    "pkgconfig(glslang)",
+    "pkgconfig(gl)",
+    "pkgconfig(egl)",
+    "pkgconfig(libdrm)",
+    "pkgconfig(lcms2)",
+    "pkgconfig(lua)",
+  }
 }
 
 %if 0%{?fedora} > 42
