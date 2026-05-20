@@ -12,7 +12,6 @@ ExcludeArch:    %{ix86}
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
-BuildRequires:  glaze-devel
 
 BuildRequires:  qt6-qtbase-gui
 BuildRequires:  qt6-qtbase
@@ -21,6 +20,11 @@ BuildRequires:  qt6-qtdeclarative-devel
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  wayland-devel
 BuildRequires:  pkgconfig(hyprutils)
+BuildRequires:  glaze-devel
+BuildRequires:  hyprtoolkit
+BuildRequires:  pkgconfig(libdrm)
+BuildRequires:  pkgconfig(libpci)
+BuildRequires:  pixman
 
 Requires:       /usr/bin/lscpu
 Requires:       /usr/bin/lspci
