@@ -1,6 +1,6 @@
 Name:           hyprutils
-Version:        0.13.1
-Release:        %autorelease -b2
+Version:        0.14.1
+Release:        %autorelease -b1
 Summary:        Hyprland utilities library used across the ecosystem
 
 License:        BSD-3-Clause
