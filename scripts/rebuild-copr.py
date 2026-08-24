@@ -37,7 +37,7 @@ TIERS = _check_mod.TIERS
 
 DEFAULT_OWNER = "hermitfeather"
 DEFAULT_PROJECT = "hyprland"
-DEFAULT_FEDORA = "42"
+DEFAULT_FEDORA = "43"
 
 
 def get_outdated(fedora):
