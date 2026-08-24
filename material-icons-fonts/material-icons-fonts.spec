@@ -19,7 +19,7 @@ URL:            https://google.github.io/material-design-icons/
 Material design icons is the official icon set from Google.  The icons
 are designed under the material design guidelines.}
 
-Source1:        65-%{fontpkgname}.conf
+Source0:        65-%{fontpkgname}.conf
 
 BuildRequires:  git-core
 
