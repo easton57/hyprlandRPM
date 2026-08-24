@@ -44,6 +44,40 @@ def find_spec_files(repo_dir):
                 spec_files[f] = spec_path
     return spec_files
 
+def get_dependency_set(repo_dir=None):
+    """Return the set of package names that are depended upon by at least one
+    other package's (Build)Requires.
+
+    A package in this set is a *dependency* of others: if its build fails,
+    downstream packages cannot build, so the rebuild pipeline should stop.
+    Leaf applications that nothing else depends on are not included, so their
+    failures can be tolerated without cancelling later tiers.
+
+    Matching is done by package-name substring against (Build)Requires lines,
+    which also catches ``-devel`` subpackages and ``pkgconfig(name)`` provides.
+    """
+    if repo_dir is None:
+        repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    spec_files = find_spec_files(repo_dir)
+    names = sorted({n.replace('.spec', '') for n in spec_files},
+                   key=len, reverse=True)
+
+    depended_on = set()
+    dep_re = re.compile(r'^(?:Build)?Requires\s*:', re.IGNORECASE)
+    for spec_name, spec_path in spec_files.items():
+        pkg = spec_name.replace('.spec', '')
+        with open(spec_path, 'r') as f:
+            for line in f:
+                if not dep_re.match(line):
+                    continue
+                for name in names:
+                    if name == pkg:
+                        continue
+                    if re.search(r'\b' + re.escape(name) + r'(?:\b|-)', line):
+                        depended_on.add(name)
+    return depended_on
+
+
 def parse_spec_version(spec_path):
     """Parse version and release from a spec file."""
     version = ""
