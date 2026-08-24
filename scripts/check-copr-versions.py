@@ -22,9 +22,10 @@ COPR_PROJECT = "hyprland"
 
 # Build order tiers
 TIERS = [
-    ["hyprutils", "hyprwayland-scanner", "glaze", "hyprland-protocols", "aylurs-gtk-shell", "xcur2png", "uwsm", "waybar-git", "swww", "swaylock-effects", "satty", "python-screeninfo", "mpvpaper", "python-imageio-ffmpeg", "pyprland", "matugen", "kitty", "material-icons-fonts", "hyprnome", "hellwal", "hyprdim", "eww-git", "appmenu-glib-translator", "astal-io", "cliphist"],
-    ["hyprwire", "hyprgraphics", "hyprlang", "aquamarine", "hyprpicker", "hyprqt6engine", "hypridle", "hyprsunset", "nwg-look", "hyprpolkitagent"],
-    ["hyprcursor", "hyprland-qt-support", "hyprtoolkit", "xdg-desktop-portal-hyprland", "hyprlock"],
+    ["hyprutils", "hyprwayland-scanner", "glaze", "hyprland-protocols", "aylurs-gtk-shell", "xcur2png", "uwsm", "waybar-git", "swww", "swaylock-effects", "satty", "python-screeninfo", "mpvpaper", "python-imageio-ffmpeg", "pyprland", "matugen", "kitty", "material-icons-fonts", "hyprnome", "hellwal", "hyprdim", "eww-git", "appmenu-glib-translator", "astal-io", "cliphist", "hyprland-autoname-workspaces"],
+    ["hyprwire", "hyprgraphics", "aquamarine", "hyprpicker", "nwg-look"],
+    ["hyprlang"],
+    ["hyprqt6engine", "hypridle", "hyprsunset", "hyprcursor", "hyprland-qt-support", "hyprtoolkit", "xdg-desktop-portal-hyprland", "hyprlock", "hyprpolkitagent"],
     ["hyprpaper", "hyprsysteminfo", "hyprpwcenter", "hyprlauncher", "hyprland-guiutils", "nwg-clipman"],
     ["hyprland-git", "astal", "astal-gtk4"],
     ["astal-libs", "astal-gjs"],
@@ -109,7 +110,7 @@ def get_copr_versions(fedora_version):
             return {}
         
         primary_path = match.group(1)
-        primary_url = f"{repo_url}/repodata/{primary_path}"
+        primary_url = f"{repo_url}/{primary_path}"
         
         # Download and parse primary.xml.gz
         with urllib.request.urlopen(primary_url, timeout=60) as response:
