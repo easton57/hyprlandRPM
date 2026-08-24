@@ -1,4 +1,4 @@
-0.54.2 → Built for 42+ currently
+0.56.2 → Built for 43+
 
 A collection of Hyprland and related packages:
 
@@ -37,4 +37,4 @@ A collection of Hyprland and related packages:
 * **[hyprqt6engine](https://github.com/hyprwm/hyprqt6engine)** [(spec)](https://github.com/hermitfeather/hyprlandRPM/blob/master/hyprqt6engine/hyprqt6engine.spec) - Qt6 Theme Provider for Hyprland.
 * **[hyprland-guiutils](https://github.com/hyprwm/hyprland-guiutils)** - Hyprland GUI utilities (successor to hyprland-qtutils)
 
-Originall forked from https://github.com/solopasha/hyprlandRPM
+Originally forked from https://github.com/solopasha/hyprlandRPM
