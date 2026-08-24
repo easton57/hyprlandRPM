@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name:           aylurs-gtk-shell
-Version:        3.1.1
+Version:        3.1.2
 Release:        %autorelease
 Summary:        Building blocks for creating custom desktop shells
 License:        LGPL-2.1-only
