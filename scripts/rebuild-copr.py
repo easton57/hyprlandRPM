@@ -16,7 +16,11 @@ Usage:
     python3 rebuild-copr.py --fedora 41     # different release
     python3 rebuild-copr.py --dry-run       # show what would be submitted
     python3 rebuild-copr.py --continue-on-failure
-"""
+
+A failed build only halts later tiers when the failing package is a
+dependency of others (e.g. hyprutils). Failures of leaf packages that
+nothing else depends on (e.g. swww) are reported but do not stop the run.
+ """
 
 import argparse
 import importlib.util
@@ -34,10 +38,11 @@ _spec = importlib.util.spec_from_file_location(
 _check_mod = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_check_mod)
 TIERS = _check_mod.TIERS
+DEPENDENCY_SET = _check_mod.get_dependency_set()
 
 DEFAULT_OWNER = "hermitfeather"
 DEFAULT_PROJECT = "hyprland"
-DEFAULT_FEDORA = "42"
+DEFAULT_FEDORA = "43"
 
 
 def get_outdated(fedora):
@@ -96,7 +101,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true",
                         help="Print what would be submitted without doing it")
     parser.add_argument("--continue-on-failure", action="store_true",
-                        help="Keep going to next tier even if a build fails")
+                        help="Keep going to next tier even if a dependency build fails")
     args = parser.parse_args()
 
     project = f"{args.owner}/{args.project}"
@@ -117,6 +122,7 @@ def main():
     print(f"Rebuilding {len(outdated)} outdated package(s) against "
           f"{project} (fedora {args.fedora})")
 
+    blocking_failed = False
     any_failed = False
     for i, tier in enumerate(TIERS):
         tier_pkgs = [p for p in tier if p in outdated]
@@ -129,9 +135,12 @@ def main():
             print(f"  [{mark}] {pkg} ({detail})")
             if status == "fail":
                 any_failed = True
+                if pkg in DEPENDENCY_SET:
+                    blocking_failed = True
 
-        if any_failed and not args.continue_on_failure:
-            print("\nA build failed; stopping before next tier. "
+        if blocking_failed and not args.continue_on_failure:
+            print("\nA build for a dependency failed; stopping before next "
+                  "tier so dependents are not built against a broken dep. "
                   "Use --continue-on-failure to push through.")
             sys.exit(1)
 
