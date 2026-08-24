@@ -3,3 +3,4 @@
 *.rpm
 results_*
 __pycache__
+logs
