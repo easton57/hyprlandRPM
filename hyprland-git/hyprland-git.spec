@@ -97,6 +97,7 @@ hyprdeps = {
     "pkgconfig(libdrm)",
     "pkgconfig(lcms2)",
     "pkgconfig(lua)",
+    "pkgconfig(libeis)",
   }
 }
 
