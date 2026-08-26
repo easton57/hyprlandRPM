@@ -98,6 +98,7 @@ hyprdeps = {
     "pkgconfig(lcms2)",
     "pkgconfig(lua)",
     "pkgconfig(libeis-1.0)",
+    "pkgconfig(readline)",
   }
 }
 
