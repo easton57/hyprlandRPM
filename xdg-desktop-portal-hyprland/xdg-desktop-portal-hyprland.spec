@@ -28,6 +28,7 @@ BuildRequires:  pkgconfig(systemd)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-protocols)
 BuildRequires:  pkgconfig(wayland-scanner)
+BuildRequires:  pkgconfig(uuid)
 
 Requires:       dbus
 # required for Screenshot portal implementation

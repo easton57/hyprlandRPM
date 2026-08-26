@@ -79,8 +79,34 @@ def get_dependency_set(repo_dir=None):
     return depended_on
 
 
-def parse_spec_version(spec_path):
-    """Parse version and release from a spec file."""
+def parse_spec_version(spec_path, fedora_version="43"):
+    """Parse version and release from a spec file.
+
+    The version/release lines often contain unexpanded RPM macros
+    (e.g. ``%{bumpver}``, ``%{shortcommit0}``, ``%{?dist}``, ``%autorelease``).
+    Reading them raw makes them never match the fully-resolved versions
+    reported by COPR, which forces packages to rebuild forever. Resolve the
+    macros with ``rpmspec`` (which evaluates in-spec ``%global`` definitions)
+    so the comparison is accurate.
+
+    The ``%{?dist}`` tag is pinned to the Fedora release being checked so the
+    local evaluation matches the COPR chroot (e.g. ``.fc43``) instead of the
+    host's own dist tag, which would otherwise flag every package as newer.
+    """
+    try:
+        result = subprocess.run(
+            ["rpmspec", "-q", "--srpm",
+             "--define", f"dist .fc{fedora_version}",
+             "--qf", "%{VERSION} %{RELEASE}", spec_path],
+            capture_output=True, text=True, timeout=60)
+        out = result.stdout.strip().splitlines()
+        if result.returncode == 0 and out:
+            parts = out[0].split(None, 1)
+            if len(parts) == 2:
+                return parts[0], parts[1]
+    except Exception:
+        pass
+    # Fallback: read the raw lines if rpmspec is unavailable or fails.
     version = ""
     release = ""
     with open(spec_path, 'r') as f:
@@ -139,26 +165,36 @@ def get_copr_versions(fedora_version):
         return {}
 
 def compare_versions(local_ver, copr_ver):
-    """Compare versions. Returns True if local is newer or different."""
+    """Compare versions. Returns True if local is newer (needs rebuild)."""
     if local_ver == copr_ver:
         return False
-    
-    # Try rpmdev-vercmp if available
+
+    # Prefer rpmdev-vercmp if available.
     try:
         result = subprocess.run(
             ['rpmdev-vercmp', local_ver, copr_ver],
             capture_output=True, text=True, timeout=5
         )
-        output = result.stdout.strip()
-        if 'newer' in output:
-            return True
-        return False
-    except:
-        # Fallback: if versions differ, assume rebuild needed
+        if result.returncode == 0:
+            output = result.stdout.strip()
+            return 'first' in output and 'newer' in output
+    except Exception:
+        pass
+
+    # Fall back to rpm's labelCompare via the python bindings.
+    try:
+        import rpm
+        rc = rpm.labelCompare(
+            ('0', local_ver.split('-')[0], '-'.join(local_ver.split('-')[1:])),
+            ('0', copr_ver.split('-')[0], '-'.join(copr_ver.split('-')[1:])),
+        )
+        return rc > 0
+    except Exception:
+        # Last resort: if versions differ, assume rebuild needed.
         return True
 
 def main():
-    fedora_version = sys.argv[1] if len(sys.argv) > 1 else "42"
+    fedora_version = sys.argv[1] if len(sys.argv) > 1 else "43"
     repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     
     print(f"Checking COPR versions for Fedora {fedora_version}...", file=sys.stderr)
@@ -172,7 +208,7 @@ def main():
     local_versions = {}
     
     for spec_name, spec_path in spec_files.items():
-        version, release = parse_spec_version(spec_path)
+        version, release = parse_spec_version(spec_path, fedora_version)
         if version:
             pkg_name = spec_name.replace('.spec', '')
             local_versions[pkg_name] = f"{version}-{release}"

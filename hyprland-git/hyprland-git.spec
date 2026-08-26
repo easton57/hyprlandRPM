@@ -11,6 +11,7 @@
 %global udis86_shortcommit %(c=%{udis86_commit}; echo ${c:0:7})
 
 %global libxkbcommon_version 1.11.0
+%global glaze_version 7.0.0
 
 Name:           hyprland-git
 Version:        0.56.2%{?bumpver:^%{bumpver}.git%{hyprland_shortcommit}}
@@ -35,6 +36,7 @@ Source0:        %{url}/releases/download/v%{version}/source-v%{version}.tar.gz
 %endif
 Source4:        macros.hyprland
 Source5:        https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-%{libxkbcommon_version}/libxkbcommon-%{libxkbcommon_version}.tar.gz
+Source6:        https://github.com/stephenberry/glaze/archive/v%{glaze_version}/glaze-%{glaze_version}.tar.gz
 
 %{lua:
 hyprdeps = {
@@ -228,6 +230,10 @@ sed -e '/GIT_COMMIT_HASH/s/unknown/%{hyprland_commit}/' \
 cp -p subprojects/hyprland-protocols/LICENSE LICENSE-hyprland-protocols
 cp -p subprojects/udis86/LICENSE LICENSE-udis86
 
+# glaze is needed by hyprpm; vendored so FetchContent does not need network/git
+mkdir -p %{_builddir}/glaze-%{glaze_version}
+tar -xf %{SOURCE6} -C %{_builddir}/glaze-%{glaze_version} --strip=1
+
 sed -i \
   -e "s|@@HYPRLAND_VERSION@@|%{version}|g" \
   %{SOURCE4}
@@ -253,7 +259,8 @@ export PKG_CONFIG_PATH=%{_builddir}/libxkbcommon-build/%{_libdir}/pkgconfig
     -GNinja \
     -DCMAKE_BUILD_TYPE=Release \
     -DNO_TESTS=TRUE \
-    -DBUILD_TESTING=FALSE
+    -DBUILD_TESTING=FALSE \
+    -DFETCHCONTENT_SOURCE_DIR_GLAZE=%{_builddir}/glaze-%{glaze_version}
 %cmake_build
 
 

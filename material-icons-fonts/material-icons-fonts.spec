@@ -19,14 +19,14 @@ URL:            https://google.github.io/material-design-icons/
 Material design icons is the official icon set from Google.  The icons
 are designed under the material design guidelines.}
 
-Source0:        65-%{fontpkgname}.conf
+Source1:        65-%{fontpkgname}.conf
 
 BuildRequires:  git-core
 
 %fontpkg
 
 %prep
-%setup -c
+%setup -c -T
 git clone --single-branch --branch=master --filter=blob:none --sparse --depth=1 https://github.com/google/material-design-icons.git .
 git sparse-checkout init --cone
 git sparse-checkout set font variablefont
