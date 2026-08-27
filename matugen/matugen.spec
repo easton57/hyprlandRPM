@@ -1,5 +1,9 @@
 %bcond_with check
 
+# Vendored Rust sources start with crate attributes like `#![no_std]` that
+# brp-mangle-shebangs misreads as bogus shebangs. Skip them.
+%global __brp_mangle_shebangs_exclude_from /vendor/
+
 Name:           matugen
 Version:        4.2.0
 Release:        %autorelease
