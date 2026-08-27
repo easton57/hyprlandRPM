@@ -19,9 +19,17 @@ Usage:
     python3 update-versions.py            # dry-run report
     python3 update-versions.py --apply     # rewrite Version: where newer
     python3 update-versions.py --apply aquamarine hyprutils
+
+When a package is version-updated (or named via --bump-dependents) every
+package that depends on it gets a release bump (-bN -> -bN+1) so it rebuilds
+against the new dependency (e.g. a changed soname) and dnf reinstalls it.
+Use --bump-dependents for a dependency that changed ABI without a version
+bump, e.g. "python3 update-versions.py --bump-dependents hyprutils". Add
+--commit to git-commit the changes so COPR picks them up.
 """
 
 import argparse
+import importlib.util
 import os
 import re
 import subprocess
@@ -41,6 +49,69 @@ def find_specs(repo_dir):
             if f.endswith('.spec'):
                 specs.append(os.path.join(root, f))
     return sorted(specs)
+
+
+def _load_check_module():
+    """Load check-copr-versions.py (hyphenated name) for the shared
+    dependency graph + spec discovery helpers."""
+    spec = importlib.util.spec_from_file_location(
+        "check_copr_versions",
+        Path(__file__).resolve().parent / "check-copr-versions.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def build_dep_graph(repo_dir):
+    """name -> set of depended-on package names (forward graph)."""
+    return _load_check_module().build_dependency_graph(repo_dir)
+
+
+def reverse_dependents(graph, seeds):
+    """All packages that depend (directly or transitively) on any seed.
+    Seeds themselves are excluded from the result."""
+    rev = {}
+    for pkg, deps in graph.items():
+        for d in deps:
+            rev.setdefault(d, set()).add(pkg)
+    result = set()
+    seen = set(seeds)
+    stack = list(seeds)
+    while stack:
+        cur = stack.pop()
+        for dep in rev.get(cur, ()):
+            if dep not in seen:
+                seen.add(dep)
+                result.add(dep)
+                stack.append(dep)
+    return result
+
+
+def bump_release(path, reason):
+    """Bump a package's ``%autorelease -b<N>`` base by one so it builds as a
+    newer release (and therefore reinstalls against a changed dependency such
+    as a library soname bump).
+
+    Returns (ok, detail). Refuses to touch specs whose Release is not
+    ``%autorelease`` so a manual Release can be edited by hand instead.
+    """
+    text = Path(path).read_text()
+    m = re.search(r'^Release:\s*(.+)$', text, re.MULTILINE)
+    if not m:
+        return False, "no Release: line found"
+    line = m.group(1)
+    if '%autorelease' not in line and '%autorel' not in line:
+        return False, f"Release is not %autorelease ('{line.strip()}')"
+    bm = re.search(r'-b(\d+)', line)
+    if bm:
+        new_base = int(bm.group(1)) + 1
+        new_line = line[:bm.start()] + f"-b{new_base}" + line[bm.end():]
+    else:
+        # No base today (builds as -b1); add -b2 so it becomes newer.
+        new_line = line.rstrip() + " -b2"
+    text = text.replace(m.group(0), "Release:        " + new_line, 1)
+    Path(path).write_text(text)
+    return True, f"Release: {new_line.strip()}"
 
 
 def parse_spec(path):
@@ -174,10 +245,26 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--apply", action="store_true",
                     help="Rewrite Version: lines where upstream is newer")
+    ap.add_argument("--no-cascade", action="store_true",
+                    help="Do not bump dependents' release when a package is "
+                         "version-updated (disables the automatic cascade)")
+    ap.add_argument("--bump-dependents", nargs="*", default=[], metavar="PKG",
+                    help="Force a release bump on every (transitive) dependent "
+                         "of these packages, and on the packages themselves. "
+                         "Use for a dependency that changed its soname/ABI "
+                         "without a version change, e.g. --bump-dependents hyprutils")
+    ap.add_argument("--commit", action="store_true",
+                    help="git add + commit the changed specs so COPR picks up "
+                         "the bump (a rebuild only happens against committed specs)")
     ap.add_argument("packages", nargs="*", help="Limit to these package names")
     args = ap.parse_args()
 
     repo_dir = Path(__file__).resolve().parent.parent
+    check_mod = _load_check_module()
+    graph = check_mod.build_dependency_graph(repo_dir)
+    spec_map = {n.replace('.spec', ''): p
+                for n, p in check_mod.find_spec_files(repo_dir).items()}
+
     specs = find_specs(repo_dir)
     if args.packages:
         wanted = set(args.packages)
@@ -206,7 +293,9 @@ def main():
             if args.apply:
                 apply_update(info, latest)
                 status += " [updated]"
-                changed.append(info["name"])
+                # key the cascade on the spec filename so it lines up with the
+                # dependency graph, not the (occasionally different) Name: field.
+                changed.append(os.path.splitext(os.path.basename(spec))[0])
             else:
                 status += " [dry-run]"
         elif cmp < 0:
@@ -217,6 +306,58 @@ def main():
 
     if changed:
         print(f"\nUpdated {len(changed)} spec(s): {', '.join(changed)}")
+
+    # --- Dependents cascade ---------------------------------------------
+    # When a package is updated (or explicitly named via --bump-dependents),
+    # every package that depends on it must get a newer release so dnf
+    # reinstalls it against the new dependency (e.g. a changed soname).
+    updated = set(changed)
+    auto_seeds = updated if (args.apply and not args.no_cascade) else set()
+    manual_seeds = set(args.bump_dependents)
+    seeds = auto_seeds | manual_seeds
+
+    to_bump = set()
+    if seeds:
+        to_bump = reverse_dependents(graph, seeds)
+        if manual_seeds:
+            # The named packages themselves changed ABI without a version
+            # bump, so they need a release bump too.
+            to_bump |= {s for s in manual_seeds if s in spec_map}
+        # Packages already getting a fresh Version are already newer; skip.
+        to_bump -= updated
+
+    if not to_bump:
+        if seeds:
+            print("\nNo additional dependents to bump.")
+        return
+
+    seed_names = sorted(s for s in seeds if s in spec_map)
+    print(f"\nCascade: bumping release of {len(to_bump)} dependent(s) for "
+          f"{', '.join(seed_names) or 'update'}:")
+    bumped = []
+    do_bump = bool(args.apply or args.bump_dependents)
+    for pkg in sorted(to_bump):
+        path = spec_map.get(pkg)
+        if not path:
+            continue
+        if not do_bump:
+            print(f"  [dry-run] would bump {pkg}")
+            continue
+        ok, detail = bump_release(path, f"Rebuild for {', '.join(seed_names)}")
+        print(f"  [{'OK  ' if ok else 'SKIP'}] {pkg}: {detail}")
+        if ok:
+            bumped.append((pkg, path))
+
+    if bumped and args.commit:
+        msg = ("Rebuild dependents for " + ", ".join(seed_names) +
+               "\n\n" + "\n".join(f"- {p}" for p, _ in bumped))
+        subprocess.run(["git", "add", *(p for _, p in bumped)], check=True)
+        subprocess.run(["git", "commit", "-m", msg], check=True)
+        print(f"\nCommitted {len(bumped)} spec(s). Push, then run "
+              f"rebuild-copr.py to rebuild them in dependency order.")
+    elif bumped:
+        print("\nBumped (uncommitted). Commit/push, then run rebuild-copr.py "
+              "to rebuild them in dependency order.")
 
 
 if __name__ == "__main__":
