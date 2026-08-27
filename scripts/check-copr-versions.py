@@ -79,6 +79,39 @@ def get_dependency_set(repo_dir=None):
     return depended_on
 
 
+def build_dependency_graph(repo_dir=None):
+    """Return a dict mapping each package name to the set of other package
+    names it depends on (via ``BuildRequires``/``Requires`` substring match,
+    which also catches ``-devel`` subpackages and ``pkgconfig(name)``).
+
+    This is the forward dependency graph: ``graph[pkg]`` is what ``pkg`` needs
+    to build/run. Reverse it to find everything that would break when ``pkg``
+    changes (e.g. a soname bump in a library).
+    """
+    if repo_dir is None:
+        repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    spec_files = find_spec_files(repo_dir)
+    names = sorted({n.replace('.spec', '') for n in spec_files},
+                   key=len, reverse=True)
+
+    graph = {}
+    dep_re = re.compile(r'^(?:Build)?Requires\s*:', re.IGNORECASE)
+    for spec_name, spec_path in spec_files.items():
+        pkg = spec_name.replace('.spec', '')
+        deps = set()
+        with open(spec_path) as f:
+            for line in f:
+                if not dep_re.match(line):
+                    continue
+                for name in names:
+                    if name == pkg:
+                        continue
+                    if re.search(r'\b' + re.escape(name) + r'(?:\b|-)', line):
+                        deps.add(name)
+        graph[pkg] = deps
+    return graph
+
+
 def parse_spec_version(spec_path, fedora_version="43"):
     """Parse version and release from a spec file.
 
